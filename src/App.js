@@ -1,19 +1,31 @@
 import React from 'react';
-import styled from "styled-components"
 import { createGlobalStyle } from 'styled-components';
+
+// Todo와 관련된 모든 Context를 사용하도록 Provider를 가져옴
+import { TodoProvider } from './TodoContext';
+
+// components
+import TodoTemplate from './components/TodoTemplate';
+import TodoHead from './components/TodoHead';
+import TodoList from './components/TodoList';
+import TodoCreate from './components/TodoCreate';
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #e9ecef;
+    background-color: #D3DEDC;
   }
 `;
 
 function App() {
   return (
-    <>
+    <TodoProvider>
       <GlobalStyle />
-      <div>안녕하세요</div>
-    </>
+      <TodoTemplate>
+        <TodoHead />
+        <TodoList />
+        <TodoCreate />
+      </TodoTemplate>
+    </TodoProvider>
   );
 }
 
