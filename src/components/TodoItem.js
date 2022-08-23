@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { MdDone, MdDelete } from "react-icons/md";
+import { BsPencilFill } from "react-icons/bs";
 
 import { useTodoDispatch } from "../TodoContext";
+
+const Update = styled.div`
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  color: #dee2e6;
+  font-size: 24px;
+  cursor: pointer;
+  &:hover {
+    color: #ff6b6b;
+  }
+  display: none;
+`;
+
 const Remove = styled.div`
   display: flex;
   align-items: center;
@@ -23,6 +38,9 @@ const TodoItemBlock = styled.div`
   padding-bottom: 12px;
   &:hover {
     ${Remove} {
+      display: initial;
+    }
+    ${Update} {
       display: initial;
     }
   }
@@ -58,16 +76,34 @@ const Text = styled.div`
     `}
 `;
 
-const TodoItem = ({ id, done, text }) => {
+const TodoItem = ({ id, text, done }) => {
+  const [value, setValue] = useState(text);
+  const [isEdit, setIsEdit] = useState(false);
+
   const dispatch = useTodoDispatch();
   const onToggle = () => dispatch({ type: "TOGGLE", id });
   const onRemove = () => dispatch({ type: "REMOVE", id });
+  const onUpdate = (e) => {
+    dispatch({
+      type: "UPDATE",
+      todo: {
+        id,
+        text: text,
+        done,
+      },
+    });
+    setIsEdit(false);
+  };
+
   return (
     <TodoItemBlock>
       <CheckCircle done={done} onClick={onToggle}>
         {done && <MdDone />}
       </CheckCircle>
       <Text done={done}>{text}</Text>
+      <Update onClick={onUpdate} value={value}>
+        <BsPencilFill />
+      </Update>
       <Remove onClick={onRemove}>
         <MdDelete />
       </Remove>
